@@ -14,6 +14,12 @@ static unsigned long trialStartMs = 0;
 static unsigned long backingStartMs = 0;
 static float rpmBeforeLine = 0;
 static bool stableRpmLogged = false;
+static int scenarioARightPwm() {
+  return constrain(SCENARIO_A_TARGET_PWM + SCENARIO_A_RIGHT_PWM_OFFSET, 0, 255);
+}
+static int scenarioALeftPwm() {
+  return constrain(SCENARIO_A_TARGET_PWM + SCENARIO_A_LEFT_PWM_OFFSET, 0, 255);
+}
 
 void initScenarioA() {
   if (!SCENARIO_A_ENABLED) return;
@@ -37,7 +43,7 @@ void runScenarioA(const LineSensors &line, unsigned long loopStartUs) {
   }
 
   if (phase == A_RUN_FORWARD) {
-    forward(SCENARIO_A_TARGET_PWM);
+    forward(scenarioALeftPwm(), scenarioARightPwm());
     if (!stableRpmLogged && nowMs - trialStartMs >= SCENARIO_A_RPM_STABLE_TIME_MS) {
       sendScenarioAEvent("RPM_STABLE", nowUs, leftWheelRpm());
       stableRpmLogged = true;

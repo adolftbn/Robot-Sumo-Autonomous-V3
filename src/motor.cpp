@@ -18,10 +18,13 @@ void brakeMotor() {
   digitalWrite(IN1, HIGH); digitalWrite(IN2, HIGH); digitalWrite(IN3, HIGH); digitalWrite(IN4, HIGH);
   ledcWrite(PWM_CHANNEL_A, 255); ledcWrite(PWM_CHANNEL_B, 255); setMotorState(MOTOR_BRAKE, 255);
 }
-void forward(int pwm) {
+void forward(int pwm) { forward(pwm, pwm); }
+void forward(int leftPwm, int rightPwm) {
   digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW);
-  ledcWrite(PWM_CHANNEL_A, pwm); ledcWrite(PWM_CHANNEL_B, pwm); setMotorState(MOTOR_FORWARD, pwm);
+  ledcWrite(PWM_CHANNEL_A, leftPwm); ledcWrite(PWM_CHANNEL_B, rightPwm); setMotorState(MOTOR_FORWARD, leftPwm);
 }
+void forwardChannelAOnly(int pwm) { forward(pwm, 0); }
+void forwardChannelBOnly(int pwm) { forward(0, pwm); }
 void backward(int pwm) {
   digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH);
   ledcWrite(PWM_CHANNEL_A, pwm); ledcWrite(PWM_CHANNEL_B, pwm); setMotorState(MOTOR_BACKWARD, pwm);
