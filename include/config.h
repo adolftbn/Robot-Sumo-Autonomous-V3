@@ -65,11 +65,11 @@ constexpr bool SCENARIO_A_ENABLED = true;
 // Motor-channel diagnostic is complete; use Scenario A behavior again.
 constexpr bool MOTOR_CHANNEL_DIAGNOSTIC_ENABLED = false;
 constexpr uint16_t SCENARIO_A_TRIAL_ID = 1;
-constexpr int SCENARIO_A_TARGET_PWM = 191;  // Allowed research levels: 127, 191, 255.
+constexpr int SCENARIO_A_TARGET_PWM = 255;  // Allowed research levels: 127, 191, 255.
 // Calibration test: keep the encoder-equipped left wheel at TARGET_PWM and
 // reduce the faster right wheel to improve the straight-line trajectory.
 constexpr int SCENARIO_A_LEFT_PWM_OFFSET = 0;
-constexpr int SCENARIO_A_RIGHT_PWM_OFFSET = -41;
+constexpr int SCENARIO_A_RIGHT_PWM_OFFSET = -40;
 constexpr uint32_t SCENARIO_A_RPM_SAMPLE_INTERVAL_MS = 50;
 constexpr uint32_t SCENARIO_A_RPM_STABLE_TIME_MS = 500;
 constexpr uint32_t SCENARIO_A_MAX_BRAKE_TIME_MS = 1000;

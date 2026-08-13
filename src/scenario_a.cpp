@@ -73,7 +73,10 @@ void runScenarioA(const LineSensors &line, unsigned long loopStartUs) {
   }
 
   if (phase == A_BACKING) {
-    if (line.back) {
+    // Disable rear sensor for PWM 255 to allow longer backing distance
+    bool checkRearSensor = (SCENARIO_A_TARGET_PWM < 255);
+    
+    if (checkRearSensor && line.back) {
       stopMotor();
       sendScenarioAEvent("BACK_LINE_DETECTED", nowUs, leftWheelRpm(), nowUs - lineDetectedUs);
       phase = A_COMPLETE;
