@@ -14,3 +14,12 @@ void sendTelemetry(RobotState state, const LineSensors &line, unsigned long loop
   Serial.print(currentMotorPwm()); Serial.print(','); Serial.print(currentMotorCommand()); Serial.print(','); Serial.println(loopTimeUs);
   debugTimer = now;
 }
+void sendScenarioAEvent(const char *event, unsigned long tUs, float rpm, unsigned long responseUs) {
+  Serial.print("A_EVENT,"); Serial.print(SCENARIO_A_TRIAL_ID); Serial.print(','); Serial.print(event); Serial.print(',');
+  Serial.print(tUs); Serial.print(','); Serial.print(SCENARIO_A_TARGET_PWM); Serial.print(','); Serial.print(rpm, 2); Serial.print(','); Serial.println(responseUs);
+}
+void sendScenarioASample(unsigned long tUs, float rpm, unsigned long loopTimeUs) {
+  Serial.print("A_SAMPLE,"); Serial.print(SCENARIO_A_TRIAL_ID); Serial.print(','); Serial.print(tUs); Serial.print(',');
+  Serial.print(SCENARIO_A_TARGET_PWM); Serial.print(','); Serial.print(rpm, 2); Serial.print(','); Serial.print(currentMotorCommand()); Serial.print(',');
+  Serial.print(currentMotorPwm()); Serial.print(','); Serial.println(loopTimeUs);
+}

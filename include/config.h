@@ -57,3 +57,14 @@ constexpr uint32_t ESCAPE_BACK_FORWARD_TIME_MS = 140;
 
 constexpr bool DEBUG_TELEMETRY = true;
 constexpr uint32_t DEBUG_INTERVAL_MS = 200;
+constexpr uint32_t SERIAL_BAUD = 230400;
+
+// Scenario A: set ENABLED to true for one straight-line PWM/RPM/overshoot trial.
+// Change TARGET_PWM and TRIAL_ID before uploading for the next trial.
+constexpr bool SCENARIO_A_ENABLED = true;
+constexpr uint16_t SCENARIO_A_TRIAL_ID = 1;
+constexpr int SCENARIO_A_TARGET_PWM = 127;  // Allowed research levels: 127, 191, 255.
+constexpr uint32_t SCENARIO_A_RPM_SAMPLE_INTERVAL_MS = 50;
+constexpr uint32_t SCENARIO_A_RPM_STABLE_TIME_MS = 500;
+constexpr uint32_t SCENARIO_A_MAX_BRAKE_TIME_MS = 1000;
+constexpr uint32_t SCENARIO_A_MIN_BACK_TIME_MS = 140;

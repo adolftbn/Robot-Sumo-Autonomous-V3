@@ -41,9 +41,9 @@ long leftDistanceCm() { return lastLeftDist; }
 long rightDistanceCm() { return lastRightDist; }
 bool leftTargetFresh(unsigned long now) { return lastLeftDist != 999 && leftDistanceTime && now - leftDistanceTime <= SENSOR_FRESH_TIME_MS; }
 bool rightTargetFresh(unsigned long now) { return lastRightDist != 999 && rightDistanceTime && now - rightDistanceTime <= SENSOR_FRESH_TIME_MS; }
-void updateLeftWheelRpm() {
-  unsigned long now = millis(); if (now - rpmTimer < 1000) return; rpmTimer = now;
+void updateLeftWheelRpm(uint32_t intervalMs) {
+  unsigned long now = millis(); if (now - rpmTimer < intervalMs) return; rpmTimer = now;
   noInterrupts(); uint32_t pulses = leftWheelPulseCount; leftWheelPulseCount = 0; interrupts();
-  rpm = (pulses * 60.0f) / PULSE_PER_REV;
+  rpm = (pulses * 60000.0f) / (PULSE_PER_REV * intervalMs);
 }
 float leftWheelRpm() { return rpm; }

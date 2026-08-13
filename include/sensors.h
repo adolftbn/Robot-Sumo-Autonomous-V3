@@ -8,5 +8,5 @@ long leftDistanceCm();
 long rightDistanceCm();
 bool leftTargetFresh(unsigned long now);
 bool rightTargetFresh(unsigned long now);
-void updateLeftWheelRpm();
+void updateLeftWheelRpm(uint32_t intervalMs = 1000);
 float leftWheelRpm();
