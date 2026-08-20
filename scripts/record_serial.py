@@ -1,7 +1,7 @@
 """Record ESP32 Sumo Robot telemetry from UART into CSV files.
 
-Example for the 127 PWM experiment:
-    python scripts/record_serial.py --port COM3 --pwm 127
+Example for the Scenario B 191 PWM experiment:
+    python scripts/record_serial.py --port COM3 --pwm 191 --experiment b
 
 Stop recording with Ctrl+C. Each PWM is recorded in its own folder.
 """
@@ -58,9 +58,11 @@ def main() -> None:
     parser.add_argument("--port", required=True, help="Port ESP32, misalnya COM3.")
     parser.add_argument("--baud", type=int, default=230400, help="Harus sama dengan SERIAL_BAUD firmware.")
     parser.add_argument("--pwm", type=int, required=True, choices=[127, 191, 255], help="PWM target yang sedang diuji.")
+    parser.add_argument("--experiment", choices=["a", "b"], default="a", help="Jenis percobaan untuk folder dan prefix data.")
     args = parser.parse_args()
 
-    output_dir = Path("data/scenario_a") / f"pwm{args.pwm}"
+    record_prefix = args.experiment.upper()
+    output_dir = Path("data") / f"scenario_{args.experiment}" / f"pwm{args.pwm}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     event_path = output_dir / "scenario_a_events.csv"
@@ -85,8 +87,8 @@ def main() -> None:
                 fields = raw_line.split(",")
                 record_type = fields[0]
 
-                if record_type == "A_EVENT" and len(fields) == len(EVENT_HEADER) + 1:
-                    # ESP32 emits: A_EVENT,firmware_trial,event,... . The local
+                if record_type == f"{record_prefix}_EVENT" and len(fields) == len(EVENT_HEADER) + 1:
+                    # ESP32 emits: <experiment>_EVENT,firmware_trial,event,... . The local
                     # logger assigns trial numbers so firmware need not be
                     # re-uploaded between trials.
                     if fields[2] == "TRIAL_START":
@@ -99,7 +101,7 @@ def main() -> None:
                     event_writer.writerow([active_trial, *fields[2:]])
                     event_file.flush()
                     print(raw_line)
-                elif record_type == "A_SAMPLE" and len(fields) == len(SAMPLE_HEADER) + 1:
+                elif record_type == f"{record_prefix}_SAMPLE" and len(fields) == len(SAMPLE_HEADER) + 1:
                     if active_trial is None:
                         continue
                     sample_writer.writerow([active_trial, *fields[2:]])

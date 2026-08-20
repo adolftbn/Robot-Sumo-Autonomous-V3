@@ -61,7 +61,8 @@ constexpr uint32_t SERIAL_BAUD = 230400;
 
 // Scenario A: set ENABLED to true for one straight-line PWM/RPM/overshoot trial.
 // Change TARGET_PWM and TRIAL_ID before uploading for the next trial.
-constexpr bool SCENARIO_A_ENABLED = true;
+constexpr bool SCENARIO_A_ENABLED = false;
+constexpr bool SCENARIO_B_ENABLED = true;
 // Motor-channel diagnostic is complete; use Scenario A behavior again.
 constexpr bool MOTOR_CHANNEL_DIAGNOSTIC_ENABLED = false;
 constexpr uint16_t SCENARIO_A_TRIAL_ID = 1;
@@ -74,3 +75,12 @@ constexpr uint32_t SCENARIO_A_RPM_SAMPLE_INTERVAL_MS = 50;
 constexpr uint32_t SCENARIO_A_RPM_STABLE_TIME_MS = 500;
 constexpr uint32_t SCENARIO_A_MAX_BRAKE_TIME_MS = 1000;
 constexpr uint32_t SCENARIO_A_MIN_BACK_TIME_MS = 140;
+
+constexpr int SCENARIO_B_TARGET_PWM = 191;
+constexpr uint16_t SCENARIO_B_TRIAL_ID = 1;
+constexpr int SCENARIO_B_LEFT_PWM_OFFSET = 0;
+constexpr int SCENARIO_B_RIGHT_PWM_OFFSET = -40;
+constexpr uint32_t SCENARIO_B_MAX_BRAKE_TIME_MS = 1000;
+constexpr uint32_t SCENARIO_B_BACK_TIME_MS = 140;
+constexpr int SCENARIO_B_TURN_PWM = 190;
+constexpr uint32_t SCENARIO_B_TURN_TIME_MS = 900;

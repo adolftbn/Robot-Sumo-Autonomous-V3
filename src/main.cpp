@@ -5,6 +5,7 @@
 #include "motor.h"
 #include "sensors.h"
 #include "scenario_a.h"
+#include "scenario_b.h"
 #include "telemetry.h"
 
 static void runMotorChannelDiagnostic() {
@@ -43,6 +44,7 @@ void setup() {
   Serial.println("STARTING...");
   delay(1000);
   initScenarioA();
+  initScenarioB();
 }
 
 void loop() {
@@ -52,6 +54,10 @@ void loop() {
   }
   unsigned long loopStart = micros();
   LineSensors line = readLineSensors();
+  if (scenarioBActive()) {
+    runScenarioB(line, loopStart);
+    return;
+  }
   if (scenarioAActive()) {
     runScenarioA(line, loopStart);
     return;
