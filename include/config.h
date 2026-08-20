@@ -51,7 +51,7 @@ constexpr uint32_t ESCAPE_FRONT_MIN_BACK_TIME_MS = 100;
 constexpr uint32_t ESCAPE_FRONT_MAX_BACK_TIME_MS = 180;
 constexpr uint32_t ESCAPE_FRONT_BRAKE_TIME_MS = 40;
 constexpr uint32_t REAR_CONFIRM_TIME_MS = 30;
-constexpr uint32_t ESCAPE_FRONT_TURN_TIME_MS = 900;
+constexpr uint32_t ESCAPE_FRONT_TURN_TIME_MS = 450;
 constexpr uint32_t ESCAPE_SIDE_TURN_TIME_MS = 280;
 constexpr uint32_t ESCAPE_BACK_FORWARD_TIME_MS = 140;
 
@@ -83,4 +83,4 @@ constexpr int SCENARIO_B_RIGHT_PWM_OFFSET = -40;
 constexpr uint32_t SCENARIO_B_MAX_BRAKE_TIME_MS = 1000;
 constexpr uint32_t SCENARIO_B_BACK_TIME_MS = 140;
 constexpr int SCENARIO_B_TURN_PWM = 190;
-constexpr uint32_t SCENARIO_B_TURN_TIME_MS = 900;
+constexpr uint32_t SCENARIO_B_TURN_TIME_MS = 450;
