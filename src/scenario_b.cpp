@@ -9,7 +9,7 @@ enum ScenarioBPhase { B_DISABLED, B_RUN_FORWARD, B_BRAKING, B_BACKING, B_TURNING
 ScenarioBPhase phase = B_DISABLED;
 unsigned long lineDetectedUs = 0;
 unsigned long backingStartMs = 0;
-unsigned long turnStartMs = 0;
+unsigned long turnStartUs = 0;
 unsigned long lastSampleMs = 0;
 Direction turnDirection = DIR_RIGHT;
 
@@ -30,6 +30,11 @@ void sendSample(unsigned long tUs, float rpm, unsigned long loopTimeUs) {
   Serial.print("B_SAMPLE,"); Serial.print(SCENARIO_B_TRIAL_ID); Serial.print(','); Serial.print(tUs); Serial.print(',');
   Serial.print(SCENARIO_B_TARGET_PWM); Serial.print(','); Serial.print(rpm, 2); Serial.print(','); Serial.print(currentMotorCommand()); Serial.print(',');
   Serial.print(currentMotorPwm()); Serial.print(','); Serial.println(loopTimeUs);
+}
+
+const char *frontSensorEvent(const LineSensors &line) {
+  if (line.frontRight && line.frontLeft) return "LINE_DETECTED_BOTH";
+  return line.frontRight ? "LINE_DETECTED_RIGHT" : "LINE_DETECTED_LEFT";
 }
 }
 
@@ -63,7 +68,9 @@ void runScenarioB(const LineSensors &line, unsigned long loopStartUs) {
       lineDetectedUs = nowUs;
       turnDirection = (line.frontRight && !line.frontLeft) ? DIR_LEFT : DIR_RIGHT;
       brakeMotor();
-      sendEvent("LINE_DETECTED", lineDetectedUs, leftWheelRpm());
+      unsigned long commandChangedUs = micros();
+      sendEvent(frontSensorEvent(line), lineDetectedUs, leftWheelRpm());
+      sendEvent("RESPONSE_LATENCY", commandChangedUs, leftWheelRpm(), commandChangedUs - lineDetectedUs);
       phase = B_BRAKING;
     }
     return;
@@ -82,7 +89,7 @@ void runScenarioB(const LineSensors &line, unsigned long loopStartUs) {
   if (phase == B_BACKING) {
     if (nowMs - backingStartMs >= SCENARIO_B_BACK_TIME_MS) {
       rotate(turnDirection, SCENARIO_B_TURN_PWM);
-      turnStartMs = nowMs;
+      turnStartUs = micros();
       sendEvent("BACKING_COMPLETE", nowUs, leftWheelRpm(), nowUs - lineDetectedUs);
       phase = B_TURNING;
     } else {
@@ -93,8 +100,12 @@ void runScenarioB(const LineSensors &line, unsigned long loopStartUs) {
 
   if (phase == B_TURNING) {
     rotate(turnDirection, SCENARIO_B_TURN_PWM);
-    if (nowMs - turnStartMs >= SCENARIO_B_TURN_TIME_MS) {
-      sendEvent("RETURN_FORWARD", nowUs);
+    if (nowUs - turnStartUs >= SCENARIO_B_TURN_TIME_MS * 1000UL) {
+      forward(leftPwm(), rightPwm());
+      unsigned long recoveryCompleteUs = micros();
+      unsigned long turnDurationUs = recoveryCompleteUs - turnStartUs;
+      sendEvent("TURN_COMPLETE", recoveryCompleteUs, leftWheelRpm(), turnDurationUs);
+      sendEvent("RECOVERY_COMPLETE", recoveryCompleteUs, leftWheelRpm(), recoveryCompleteUs - lineDetectedUs);
       phase = B_RETURNING;
     }
     return;
