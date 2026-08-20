@@ -65,9 +65,9 @@ def main() -> None:
     output_dir = Path("data") / f"scenario_{args.experiment}" / f"pwm{args.pwm}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    event_path = output_dir / "scenario_a_events.csv"
+    event_path = output_dir / f"scenario_{args.experiment}_events.csv"
     event_file, event_writer = open_csv(event_path, EVENT_HEADER)
-    sample_file, sample_writer = open_csv(output_dir / "scenario_a_samples.csv", SAMPLE_HEADER)
+    sample_file, sample_writer = open_csv(output_dir / f"scenario_{args.experiment}_samples.csv", SAMPLE_HEADER)
     telemetry_file, telemetry_writer = open_csv(output_dir / "telemetry.csv", TELEMETRY_HEADER)
     trial_number = last_recorded_trial(event_path)
     active_trial: int | None = None
